@@ -74,4 +74,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             notifyDataSetChanged();
         }
     }
+
+    public void setAdapterData(SampleUser sampleUser){
+        this.sampleUser = sampleUser;
+        notifyDataSetChanged();
+    }
 }

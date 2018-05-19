@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -13,6 +17,9 @@ import com.suneetsrivastava.pascolan.APIData.ApiData;
 import com.suneetsrivastava.pascolan.Model.SampleUser;
 import com.suneetsrivastava.pascolan.Model.Users;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +42,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+       getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -45,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         apiData = retrofit.create(ApiData.class);
         fetchData(PAGE_NO);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         nextButton.setOnClickListener(this);
         backButton.setOnClickListener(this);
 
@@ -74,7 +86,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
    }
 
-   private void setData(){
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.sortBy){
+            if(sampleUser!=null) {
+                Collections.sort(sampleUser.getSampleUsers(), new Comparator<Users>() {
+                    @Override
+                    public int compare(Users users, Users t1) {
+                        return users.getPriority().compareTo(t1.getPriority());
+                    }
+                });
+                recyclerViewAdapter.setAdapterData(sampleUser);
+
+            }
+        }
+        return true;
+    }
+
+    private void setData(){
         if(sampleUser!=null) {
             recyclerViewAdapter = new RecyclerViewAdapter(this, sampleUser);
             recyclerView.swapAdapter(recyclerViewAdapter, true);
