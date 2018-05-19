@@ -70,7 +70,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @Override
         public void onClick(View view) {
-            Log.e("TAG", "onClick: "+getAdapterPosition() );
+            sampleUser.getSampleUsers().remove(getAdapterPosition());
+            notifyDataSetChanged();
         }
     }
 }
